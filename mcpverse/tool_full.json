@@ -1,0 +1,576 @@
+{
+    "mcpServers": {
+        "amap-maps": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@amap/amap-maps-mcp-server"
+            ],
+            "env": {
+                "AMAP_MAPS_API_KEY": "${AMAP_API_KEY}"
+            }
+        },
+        "fetch": {
+            "command": "uvx",
+            "args": ["mcp-server-fetch"]
+        },
+        "mcp-deepwiki": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-deepwiki@latest"
+            ]
+        },
+        "howtocook-mcp": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "howtocook-mcp"
+            ]
+        },
+        "variflight": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@variflight-ai/variflight-mcp"
+            ],
+            "env": {
+                "X_VARIFLIGHT_KEY": "${VARFLIGHT_API_KEY}"
+            }
+        },
+        "time": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-time",
+                "--local-timezone=Asia/Shanghai"
+            ]
+        },
+        "excel": {
+            "command": "npx",
+            "args": [
+                "--yes",
+                "@negokaz/excel-mcp-server"
+            ],
+            "env": {
+                "EXCEL_MCP_PAGING_CELLS_LIMIT": "4000"
+            }
+        },
+        "mcp-server-chart": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@antv/mcp-server-chart"
+            ]
+        },
+        "memory": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-memory"
+            ],
+            "env": {
+                "MEMORY_FILE_PATH": "${MCPVERSE_ROOT}/mcpverse/test_data/memory.jsonl"
+            }
+        },
+        "sqlite": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "/workspace/code/servers/src/sqlite",
+                "run",
+                "mcp-server-sqlite",
+                "--db-path",
+                "${MCPVERSE_ROOT}/mcpverse/test_data/california_schools.db"
+            ]
+        },
+        "airbnb": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@openbnb/mcp-server-airbnb",
+                "--ignore-robots-txt"
+            ]
+        },
+        "alphavantage": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "${MCPVERSE_ROOT}/mcpverse/servers/alphavantage",
+                "run",
+                "alphavantage"
+            ],
+            "env": {
+                "ALPHAVANTAGE_API_KEY": "${ALPHAVANTAGE_API_KEY}"
+            }
+        },
+        "calculator": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-calculator"
+            ]
+        },
+        "dataset-viewer": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "${MCPVERSE_ROOT}/mcpverse/servers/dataset-viewer",
+                "run",
+                "dataset-viewer"
+            ]
+        },
+        "mindmap": {
+            "command": "uvx",
+            "args": [
+                "mindmap-mcp-server",
+                "--return-type",
+                "html"
+            ]
+        },
+        "rijksmuseum-server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-server-rijksmuseum"
+            ],
+            "env": {
+                "RIJKSMUSEUM_API_KEY": "${RIJKSMUSEUM_API_KEY}"
+            }
+        },
+        "nasa-mcp": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@programcomputer/nasa-mcp-server@latest"
+            ],
+            "env": {
+                "NASA_API_KEY": "${NASA_API_KEY}"
+            }
+        },
+        "datagov": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@melaodoidao/datagov-mcp-server"
+            ],
+            "env": {}
+        },
+        "simple-arxiv": {
+            "command": "python",
+            "args": [
+                "-m",
+                "mcp_simple_arxiv"
+            ]
+        },
+        "world_bank": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "${MCPVERSE_ROOT}/mcpverse/servers/world_bank_mcp_server",
+                "run",
+                "world_bank_mcp_server"
+            ]
+        },
+        "weather": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "@smithery/cli@latest",
+            "run",
+            "@turkyden/weather",
+            "--key",
+            "${SMITHERY_API_KEY}"
+          ]
+        },
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp@latest"
+            ]
+        },
+        "mcp-server-hotnews": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@wopal/mcp-server-hotnews"
+            ]
+        },
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "${MCPVERSE_ROOT}"
+            ]
+        },
+        "git": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-git",
+                "--repository",
+                "${MCPVERSE_ROOT}"
+            ]
+        },
+        "puppeteer": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-puppeteer"
+            ]
+        },
+        "Office-PowerPoint-MCP-Server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@GongRzhe/Office-PowerPoint-MCP-Server",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "exa": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "exa",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "geeknews-mcp-server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@the0807/geeknews-mcp-server",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "domain-search-server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@szypetike/domain-search-server",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "mcp-document-reader": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@jbchouinard/mcp-document-reader",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "appinsightmcp": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@JiantaoFu/appinsightmcp",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "poker_win_calculator": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@watsonchua/poker_win_calculator",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "mcp-paperswithcode": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "@smithery/cli@latest",
+            "run",
+            "@hbg/mcp-paperswithcode",
+            "--key",
+            "${SMITHERY_API_KEY}"
+          ]
+        },
+        "mcp-visit-korea": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@smithery/cli@latest",
+                "run",
+                "@pjookim/mcp-visit-korea",
+                "--key",
+                "${SMITHERY_API_KEY}"
+            ]
+        },
+        "Bazi": {
+            "command": "npx",
+            "args": ["bazi-mcp"]
+        },
+          "investor": {
+            "command": "uvx",
+            "args": [
+              "investor-agent"
+            ]
+          },
+          "arxiv-mcp-server": {
+            "command": "uv",
+            "args": [
+              "tool",
+              "run",
+              "arxiv-mcp-server",
+              "--storage-path",
+              "${MCPVERSE_ROOT}/mcpverse/results"
+            ]
+          },
+          "kospi-kosdaq": {
+            "command": "uvx",
+            "args": [
+              "kospi_kosdaq_stock_server"
+            ]
+          },
+          "whois": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@bharathvaj/whois-mcp@latest"
+            ]
+          },
+          "weibo": {
+            "command": "uvx",
+            "args": [
+              "mcp-server-weibo"
+            ]
+          },
+          "anilist": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "anilist-mcp"
+            ]
+          },
+          "berlin-transport": {
+            "command": "npx",
+            "args": [
+              "mcp-remote",
+              "https://berlin-transport.mcp-tools.app/sse"
+            ]
+          },
+          "yahoo-finance": {
+            "command": "uvx",
+            "args": [
+              "mcp-yahoo-finance"
+            ]
+          },
+          "wuwa-mcp": {
+            "command": "uvx",
+            "args": [
+              "wuwa-mcp-server"
+            ]
+          },
+          "pixiv-mcp": {
+            "command": "uvx",
+            "args": [
+              "pixiv-mcp"
+            ]
+          },
+          "poke-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@NaveenBandarage/poke-mcp",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "FinanceMCP": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@guangxiangdebizi/FinanceMCP",
+              "--key",
+              "${SMITHERY_API_KEY}",
+              "--profile",
+              "rude-antelope-7rQECz"
+            ]
+          },
+          "bilibili": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@wangshunnn/bilibili-mcp-server"
+            ]
+          },
+          "biomcp": {
+            "command": "uv",
+            "args": [
+              "run",
+              "--with",
+              "biomcp-python",
+              "biomcp",
+              "run"
+            ]
+          },
+          "opgg-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@opgginc/opgg-mcp",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "metmuseum-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@mikechao/metmuseum-mcp",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "12306-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "12306-mcp"
+            ]
+          },
+          "famxplor": {
+            "command": "npx",
+            "args": [
+              "mcp-remote",
+              "https://mcp.famxplor.com/mcp/"
+            ]
+          },
+          "ptcg-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@jlgrimes/ptcg-mcp",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "opendota-mcp-server": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@lieyanqzu/opendota-mcp-server",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "jinko-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@jinkoso/jinko-mcp",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "youtube-download": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@daniellopez-2/youtube-download",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "mcp-server-chinarailway": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@shenpeiheng/mcp-server-chinarailway",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "mcp_weather_server": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@isdaniel/mcp_weather_server",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "bilibili-mcp-server": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@chenmingkong/bilibili-mcp-server",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "fdp_basic": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "mcp-remote@latest",
+              "https://fdp.qianxin.com/mcp/v1/basic/mcp/"
+            ]
+          },
+          "macrostrat": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@smithery/cli@latest",
+              "run",
+              "@blake365/macrostrat-mcp",
+              "--key",
+              "${SMITHERY_API_KEY}"
+            ]
+          },
+          "wikipedia": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "wikipedia-mcp-server"
+            ]
+          },
+          "3rd_party_mcp_server_shuidi": {
+            "url": "https://mcp.shuidi.cn/sse",
+            "prefer_sse": true
+          }
+    }
+}

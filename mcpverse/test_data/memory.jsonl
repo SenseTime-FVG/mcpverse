@@ -1,0 +1,4 @@
+{"type":"entity","name":"小明","entityType":"Person","observations":["上下级关系中的上级"]}
+{"type":"entity","name":"小方","entityType":"Person","observations":["上下级关系中的下级"]}
+{"type":"relation","from":"小明","to":"小方","relationType":"管理"}
+{"type":"relation","from":"小明","to":"小方","relationType":"上下级关系"}
