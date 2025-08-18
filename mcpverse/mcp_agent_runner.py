@@ -311,7 +311,7 @@ You are provided with function signatures within <tools></tools> XML tags:
         if response.terminated:
             output = {
                 'answer': response.info['termination_reasons'][0],
-                'memory': agent.memory.get_context()[0]
+                'memory': str(response.info['tool_calls'][-1])
             }
         else:
             output = {
