@@ -116,6 +116,7 @@ class Evaluator:
                 write_data(self.inout_path, self.df)
                 # logger.info(f"=> save to {self.inout_path}")
             elif stage == 'get_ref':
+                os.makedirs(os.path.dirname(self.inout_path), exist_ok=True)
                 answer = results['answer']
                 self.df.loc[index, 'answer'] = answer
                 write_data(self.inout_path, self.df)
@@ -236,7 +237,7 @@ class Evaluator:
                 continue
             Qid = row['question_id']
             ref_id = row["get_answer_id"]
-            
+
             logger.info(f"=> get reference: {Qid}")
 
             try:
@@ -244,11 +245,12 @@ class Evaluator:
 
                 if results is None:  # All three attempts failed, move to next row
                     continue
-
+                
+                logger.info(f"===> Done: {Qid}")
                 self.dump_results('get_ref', i, Qid, results)
 
             except Exception as exc:
-                logger.info(f"=> get reference FAILED!! {ref_id}: {exc}")
+                logger.info(f"===> FAILED!! {Qid}: {ref_id}/{exc}")
 
 
     def get_target_tools(self):
@@ -379,7 +381,7 @@ class Evaluator:
 
     async def debug(self):
         # mcp_list_debug = ["filesystem", "fetch", "time"]
-        mcp_list_debug = ["variflight", "amap-maps", "exa"]
+        mcp_list_debug = ["variflight", "amap-maps", "exa", "filesystem"]
         # mcp_list_debug = ["amap-maps", "exa"]
         
         tools = await self.runner.connect(mcp_list_debug)
@@ -390,11 +392,10 @@ class Evaluator:
 
         row = {
             'question_id': "debug-000",
-            # 'question': f"How many files in {MCPVerse_ROOT}/test_data/txt",
-            'question': "明天下午6点左右从上海到重庆的飞机是哪班？"
+            'question': f"How many files in {MCPVerse_ROOT}/test_data/txt",
         }
         results = await self.predict_row(0, row, tools)
-        print(f"\033[94mAnswer: {results['answer']}\033[0m")
+        # print(f"\033[94mAnswer: {results['answer']}\033[0m")
 
         await self.runner.disconnect()
             

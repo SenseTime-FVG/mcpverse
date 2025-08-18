@@ -42,7 +42,7 @@ async def _get_reference_async():
 
     except (KeyError, IndexError, json.JSONDecodeError, asyncio.TimeoutError) as e:
         # 添加健壮的错误处理，应对网络问题或返回数据格式不符
-        print(f"获取或解析天气数据时出错: {e}")
+        print(f"Error fetching or parsing weather data: {e}")
         return "Sorry, I couldn't retrieve the weather information at the moment."
 
     # 3. 比较温度并生成最终的答复字符串

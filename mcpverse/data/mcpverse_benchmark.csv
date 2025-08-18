@@ -345,56 +345,56 @@ The name of the first geological unit distributed in Tuscaloosa during the Juras
 Q232,What is the name of the first stratigraphic section that existed in Tennessee during the longest geological period?,macrostrat,macrostrat/timescale+macrostrat/find-columns,L3,Nashville Dome Area - Central Tennessee,llm_as_a_judge,No,-
 Q234,Tell me the shortest travel time to get to Naples from Hong Kong on July 10th.,variflight,variflight/getTodayDate + variflight/searchFlightsByDepArr + variflight/getFlightTransferInfo,L3,965 minutes,llm_as_a_judge,No,-
 Q239,How many episodes were there in SNL50?,wikipedia,wikipedia/search_wikipedia + wikipedia/get_wikipedia_article,L3,20,llm_as_a_judge,No,-
-Q242,"What is the train number with the shortest travel time from Shenzhen North(深圳北) to Liuzhou(柳州) tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,q1
-Q243,"What is the train number with the shortest travel time from Shenzhenbei(深圳北) to Nanning(南宁) on the day after tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,q2
-Q244,"Which city will have a higher night-time temperature tomorrow, Chengdu or Chongqing, according to Amap(accurate to whole number)? Also show the temperature of both cities.",amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,q3
-Q245,What are the wind directions in Chongqing and Chengdu during the daytime tomorrow according to Amap? Are they the same?,amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,q4
-Q246,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Shenzhen Bao'an Airport to Chengdu Shuangliu Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,q5
-Q247,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Shenzhen Bao'an Airport to Wuhan Tianhe International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,q6
-Q248,Retrieve the url of top 1 article from GeekNews.,geeknews-mcp-server,get_articles,L1,,llm_as_a_judge,YES,q7
-Q251,Get search suggestions for 'language learning apps' from the App Store.,appinsightmcp,app-store-suggest,L1,,llm_as_a_judge,YES,q10
-Q252,"Which app has more ratings in the US App Store, the one with ID 570060128 or the one with ID 553834731?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,q11
-Q253,"Which has more five-star reviews in the US App Store, the one with ID 570060128 or the one with ID 553834731?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,q12
-Q261,"Based on info of paper with code, what is the title of Kaiming He's last paper posted on arXiv in 2025?",mcp-paperswithcode,list_papers_by_author_name,L1,,llm_as_a_judge,YES,q21
-Q262,"According to the information on Paper with Code, whose latest published paper has a more recent release date: Kaiming He or Numaan Naeem?",mcp-paperswithcode,list_papers_by_author_name*2,L2,,llm_as_a_judge,YES,q22
-Q263,What is the tasks included in He Kaiming's latest paper according to the information on Paper with Code?,mcp-paperswithcode,list_papers_by_author_name + search_papers + list_paper_tasks,L3,,llm_as_a_judge,YES,q23
-Q264,"Based on info of aribnb, in Parisian homestays with a check-in date of December 25, 2025, and check-out date of December 30, 2025, accommodating up to 4 adults and priced between 500 and 800, what is the highest total price in dollars?",mcp-server-airbnb,airbnb/airbnb_search,L1,,llm_as_a_judge,YES,q24
-Q265,How many datasets are related to climate change on Data.gov?,datagov,package_search,L1,,llm_as_a_judge,YES,q25
-Q266,"What is the train number with the shortest travel time from Shenzhen North(深圳北) to Liuzhou(柳州) the day after tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,q26
-Q267,"What is the train number with the shortest travel time from  Guangzhounan(广州南) to Nanning(南宁) on the day after tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,q27
-Q268,"Which city will have a higher night-time temperature tomorrow, Beijing or Wuhan, according to Amap(accurate to whole number)? Also show the temperature of both cities.",amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,q28
-Q269,What are the wind directions in Beijing and Wuhan during the daytime tomorrow according to Amap? Are they the same?,amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,q29
-Q270,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Beijing Capital International Airport to Chengdu Shuangliu International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,q30
-Q271,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Beijing Capital International Airport to Wuhan Tianhe International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,q31
-Q272,How many datasets are related to ocean on Data.gov?,datagov,package_search,L1,,llm_as_a_judge,YES,q32
-Q275,Get search suggestions for 'sports apps' from the App Store.,appinsightmcp,app-store-suggest,L1,,llm_as_a_judge,YES,q35
-Q276,"Which app has more ratings in the US App Store, the one with ID 6446788829 or the one with ID 317469184?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,q36
-Q277,"Which has more five-star reviews in the US App Store, the one with ID 6446788829 or the one with ID 317469184?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,q37
-Q278,How many active severe weather alerts are there currently in Georgia and in Iowa? Which state has more?,weather,get-alerts*2,L2,,llm_as_a_judge,YES,q38
-Q279,How many active moderate weather alerts are there currently in Colorado and in Indiana? Which state has more?,weather,get-alerts*2,L2,,llm_as_a_judge,YES,q39
-Q282,Is there more datasets related to cats or dogs on Data.gov?,datagov,package_search,L2,,llm_as_a_judge,YES,q42
-Q287,Is there more datasets related to horse or fish on Data.gov?,datagov,package_search,L2,,llm_as_a_judge,YES,q47
-Q288,What is the tasks included in Ross Girshick's latest paper according to the information on Paper with Code?,mcp-paperswithcode,list_papers_by_author_name + search_papers + list_paper_tasks,L3,,llm_as_a_judge,YES,q48
-Q289,What is the id of the first result of searching users with keyword "Hansen Yang" in Weibo?,weibo,weibo/search_users,L1,,llm_as_a_judge,YES,q49
-Q290,What is the id of the first result of searching users with keyword 'apple' in Weibo?,weibo,weibo/search_users,L1,,llm_as_a_judge,YES,q50
-Q291,"Compared to the previous closing day, did the last closing price leave me overall up or down if I own one share each of GOOGL and TSLA?",yahoo-finance,get_historical_stock_prices*2,L2,,llm_as_a_judge,YES,q51
-Q292,"Compared to the previous closing day, did the last closing price leave me overall up or down if I own one share each of AMZN and NFLX?",yahoo-finance,get_historical_stock_prices*2,L2,,llm_as_a_judge,YES,q52
-Q293,"Compared to the previous closing day, did the last closing price leave me overall up or down if I own one share of AMZN and two share of DIS?",yahoo-finance,get_historical_stock_prices*2,L2,,llm_as_a_judge,YES,q53
-Q294,Retrieve the value of AAPL’s latest dividend.,yahoo-finance,get_dividends,L1,,llm_as_a_judge,YES,q54
-Q295,Retrieve the value of DIS’s latest dividend.,yahoo-finance,get_dividends,L1,,llm_as_a_judge,YES,q55
-Q296,"Retrieve Apple’s free cash flow from its most recent quarterly cash-flow statement, expressed in billions of U.S. dollars.",yahoo-finance,get_cashflow,L1,,llm_as_a_judge,YES,q56
-Q297,"Retrieve free cash flow of Amazon and Apple from the corresponding most-recent quarterly cash-flow statement (expressed in billions of U.S. dollars). For the one with higher free cash flow, provide Tax Rate For Calcs from the corresponding most-recent quarterly income-statement data",yahoo-finance,get_cashflow*2 + get_income_statement,L3,,llm_as_a_judge,YES,q57
-Q298,"Which city will have a higher night-time temperature tomorrow, Shenyang or Guangzhou, according to Amap(accurate to whole number)? Also show the temperature of both cities.",amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,q58
-Q299,What are the wind directions in Shenyang and Guangzhou during the daytime tomorrow according to Amap? Are they the same?,amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,q59
-Q300,"Based on info of paper with code, what is the title of Xiaogang Wang's last paper posted on arXiv?",mcp-paperswithcode,list_papers_by_author_name,L1,,llm_as_a_judge,YES,q60
-Q301,"According to the information on Paper with Code, whose latest published paper has a more recent release date: Chenyuan Wu or Numaan Naeem?",mcp-paperswithcode,list_papers_by_author_name*2,L2,,llm_as_a_judge,YES,q61
-Q302,What is the tasks included in Chenyuan Wu's latest paper according to the information on Paper with Code?,mcp-paperswithcode,list_papers_by_author_name + search_papers + list_paper_tasks,L3,,llm_as_a_judge,YES,q62
-Q303,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Beijing Capital International Airport to Hainan Haikou Meilan International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,q63
-Q304,"Retrieve free cash flow of Amazon and Nvidia from the corresponding most-recent quarterly cash-flow statement (expressed in billions of U.S. dollars). For the one with higher free cash flow, provide Tax Rate For Calcs from the corresponding most-recent quarterly income-statement data",yahoo-finance,get_cashflow*2 + get_income_statement,L3,,llm_as_a_judge,YES,q64
-Q305,Is there more datasets related to electricity or water on Data.gov?,datagov,package_search,L2,,llm_as_a_judge,YES,q65
-Q306,What is the date of last week's Sunday(in UTC)?,time,get_current_time,L1,,llm_as_a_judge,YES,q66
-Q307,What is the date of last week's Monday(in UTC)?,time,get_current_time,L1,,llm_as_a_judge,YES,q67
-Q308,How many days are left until Christmas 2025(in UTC)?,time,get_current_time,L1,,llm_as_a_judge,YES,q68
+Q242,"What is the train number with the shortest travel time from Shenzhen North(深圳北) to Liuzhou(柳州) tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,tq1
+Q243,"What is the train number with the shortest travel time from Shenzhenbei(深圳北) to Nanning(南宁) on the day after tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,tq2
+Q244,"Which city will have a higher night-time temperature tomorrow, Chengdu or Chongqing, according to Amap(accurate to whole number)? Also show the temperature of both cities.",amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,tq3
+Q245,What are the wind directions in Chongqing and Chengdu during the daytime tomorrow according to Amap? Are they the same?,amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,tq4
+Q246,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Shenzhen Bao'an Airport to Chengdu Shuangliu Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,tq5
+Q247,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Shenzhen Bao'an Airport to Wuhan Tianhe International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,tq6
+Q248,Retrieve the url of top 1 article from GeekNews.,geeknews-mcp-server,get_articles,L1,,llm_as_a_judge,YES,tq7
+Q251,Get search suggestions for 'language learning apps' from the App Store.,appinsightmcp,app-store-suggest,L1,,llm_as_a_judge,YES,tq10
+Q252,"Which app has more ratings in the US App Store, the one with ID 570060128 or the one with ID 553834731?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,tq11
+Q253,"Which has more five-star reviews in the US App Store, the one with ID 570060128 or the one with ID 553834731?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,tq12
+Q261,"Based on info of paper with code, what is the title of Kaiming He's last paper posted on arXiv in 2025?",mcp-paperswithcode,list_papers_by_author_name,L1,,llm_as_a_judge,YES,tq21
+Q262,"According to the information on Paper with Code, whose latest published paper has a more recent release date: Kaiming He or Numaan Naeem?",mcp-paperswithcode,list_papers_by_author_name*2,L2,,llm_as_a_judge,YES,tq22
+Q263,What is the tasks included in He Kaiming's latest paper according to the information on Paper with Code?,mcp-paperswithcode,list_papers_by_author_name + search_papers + list_paper_tasks,L3,,llm_as_a_judge,YES,tq23
+Q264,"Based on info of aribnb, in Parisian homestays with a check-in date of December 25, 2025, and check-out date of December 30, 2025, accommodating up to 4 adults and priced between 500 and 800, what is the highest total price in dollars?",mcp-server-airbnb,airbnb/airbnb_search,L1,,llm_as_a_judge,YES,tq24
+Q265,How many datasets are related to climate change on Data.gov?,datagov,package_search,L1,,llm_as_a_judge,YES,tq25
+Q266,"What is the train number with the shortest travel time from Shenzhen North(深圳北) to Liuzhou(柳州) the day after tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,tq26
+Q267,"What is the train number with the shortest travel time from  Guangzhounan(广州南) to Nanning(南宁) on the day after tomorrow, and how long does it take?",12306-mcp,get-current-date + get-station-code-by-names + get-tickets,L3,,llm_as_a_judge,YES,tq27
+Q268,"Which city will have a higher night-time temperature tomorrow, Beijing or Wuhan, according to Amap(accurate to whole number)? Also show the temperature of both cities.",amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,tq28
+Q269,What are the wind directions in Beijing and Wuhan during the daytime tomorrow according to Amap? Are they the same?,amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,tq29
+Q270,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Beijing Capital International Airport to Chengdu Shuangliu International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,tq30
+Q271,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Beijing Capital International Airport to Wuhan Tianhe International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,tq31
+Q272,How many datasets are related to ocean on Data.gov?,datagov,package_search,L1,,llm_as_a_judge,YES,tq32
+Q275,Get search suggestions for 'sports apps' from the App Store.,appinsightmcp,app-store-suggest,L1,,llm_as_a_judge,YES,tq35
+Q276,"Which app has more ratings in the US App Store, the one with ID 6446788829 or the one with ID 317469184?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,tq36
+Q277,"Which has more five-star reviews in the US App Store, the one with ID 6446788829 or the one with ID 317469184?",appinsightmcp,app-store-ratings*2,L2,,llm_as_a_judge,YES,tq37
+Q278,How many active severe weather alerts are there currently in Georgia and in Iowa? Which state has more?,weather,get-alerts*2,L2,,llm_as_a_judge,YES,tq38
+Q279,How many active moderate weather alerts are there currently in Colorado and in Indiana? Which state has more?,weather,get-alerts*2,L2,,llm_as_a_judge,YES,tq39
+Q282,Is there more datasets related to cats or dogs on Data.gov?,datagov,package_search,L2,,llm_as_a_judge,YES,tq42
+Q287,Is there more datasets related to horse or fish on Data.gov?,datagov,package_search,L2,,llm_as_a_judge,YES,tq47
+Q288,What is the tasks included in Ross Girshick's latest paper according to the information on Paper with Code?,mcp-paperswithcode,list_papers_by_author_name + search_papers + list_paper_tasks,L3,,llm_as_a_judge,YES,tq48
+Q289,What is the id of the first result of searching users with keyword "Hansen Yang" in Weibo?,weibo,weibo/search_users,L1,,llm_as_a_judge,YES,tq49
+Q290,What is the id of the first result of searching users with keyword 'apple' in Weibo?,weibo,weibo/search_users,L1,,llm_as_a_judge,YES,tq50
+Q291,"Compared to the previous closing day, did the last closing price leave me overall up or down if I own one share each of GOOGL and TSLA?",yahoo-finance,get_historical_stock_prices*2,L2,,llm_as_a_judge,YES,tq51
+Q292,"Compared to the previous closing day, did the last closing price leave me overall up or down if I own one share each of AMZN and NFLX?",yahoo-finance,get_historical_stock_prices*2,L2,,llm_as_a_judge,YES,tq52
+Q293,"Compared to the previous closing day, did the last closing price leave me overall up or down if I own one share of AMZN and two share of DIS?",yahoo-finance,get_historical_stock_prices*2,L2,,llm_as_a_judge,YES,tq53
+Q294,Retrieve the value of AAPL’s latest dividend.,yahoo-finance,get_dividends,L1,,llm_as_a_judge,YES,tq54
+Q295,Retrieve the value of DIS’s latest dividend.,yahoo-finance,get_dividends,L1,,llm_as_a_judge,YES,tq55
+Q296,"Retrieve Apple’s free cash flow from its most recent quarterly cash-flow statement, expressed in billions of U.S. dollars.",yahoo-finance,get_cashflow,L1,,llm_as_a_judge,YES,tq56
+Q297,"Retrieve free cash flow of Amazon and Apple from the corresponding most-recent quarterly cash-flow statement (expressed in billions of U.S. dollars). For the one with higher free cash flow, provide Tax Rate For Calcs from the corresponding most-recent quarterly income-statement data",yahoo-finance,get_cashflow*2 + get_income_statement,L3,,llm_as_a_judge,YES,tq57
+Q298,"Which city will have a higher night-time temperature tomorrow, Shenyang or Guangzhou, according to Amap(accurate to whole number)? Also show the temperature of both cities.",amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,tq58
+Q299,What are the wind directions in Shenyang and Guangzhou during the daytime tomorrow according to Amap? Are they the same?,amap-maps,maps_weather*2,L2,,llm_as_a_judge,YES,tq59
+Q300,"Based on info of paper with code, what is the title of Xiaogang Wang's last paper posted on arXiv?",mcp-paperswithcode,list_papers_by_author_name,L1,,llm_as_a_judge,YES,tq60
+Q301,"According to the information on Paper with Code, whose latest published paper has a more recent release date: Chenyuan Wu or Numaan Naeem?",mcp-paperswithcode,list_papers_by_author_name*2,L2,,llm_as_a_judge,YES,tq61
+Q302,What is the tasks included in Chenyuan Wu's latest paper according to the information on Paper with Code?,mcp-paperswithcode,list_papers_by_author_name + search_papers + list_paper_tasks,L3,,llm_as_a_judge,YES,tq62
+Q303,"Could you please tell me the scheduled departure time, arrival time, and flight number of the earliest flight from Beijing Capital International Airport to Hainan Haikou Meilan International Airport tomorrow?",variflight,getTodayDate+searchFlightsByDepArr,L3,,llm_as_a_judge,YES,tq63
+Q304,"Retrieve free cash flow of Amazon and Nvidia from the corresponding most-recent quarterly cash-flow statement (expressed in billions of U.S. dollars). For the one with higher free cash flow, provide Tax Rate For Calcs from the corresponding most-recent quarterly income-statement data",yahoo-finance,get_cashflow*2 + get_income_statement,L3,,llm_as_a_judge,YES,tq64
+Q305,Is there more datasets related to electricity or water on Data.gov?,datagov,package_search,L2,,llm_as_a_judge,YES,tq65
+Q306,What is the date of last week's Sunday(in UTC)?,time,get_current_time,L1,,llm_as_a_judge,YES,tq66
+Q307,What is the date of last week's Monday(in UTC)?,time,get_current_time,L1,,llm_as_a_judge,YES,tq67
+Q308,How many days are left until Christmas 2025(in UTC)?,time,get_current_time,L1,,llm_as_a_judge,YES,tq68
 Q58+Q113,"answer the following question:
 q1: Calculate the result of: 789.123 × 345.837
 q2: Did Geoffrey Hinton co-author any publications in 2025?",calculator+mcp-paperswithcode,calculate+list_papers_by_author_name,L2,"the answer of q1 is 272907.931

@@ -58,6 +58,7 @@ VARFLIGHT_API_KEY = "YOUR_API_KEY"
 #### Debug Mode
 To run a test evaluation on a debug mode, run
 ```bash
+cd mcpverse
 # Q: How many files in {MCPVerse_ROOT}/test_data/txt ? 
 # Mounted MCP list:  ["filesystem", "fetch", "time"]
 python runner.py --mode debug --model_name deepseek-v3
