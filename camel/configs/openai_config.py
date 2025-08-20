@@ -114,6 +114,7 @@ class ChatGPTConfig(BaseConfig):
     stream: Optional[bool] = None
     stop: Optional[Union[str, Sequence[str]]] = None
     max_tokens: Optional[int] = None
+    max_completion_tokens: Optional[int] = None
     presence_penalty: Optional[float] = None
     response_format: Optional[Union[Type[BaseModel], Dict]] = None
     frequency_penalty: Optional[float] = None

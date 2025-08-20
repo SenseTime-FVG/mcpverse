@@ -50,7 +50,6 @@ class Evaluator:
     def setup(self):
         self.model_name = args.model_name
         self.suffix = args.suffix
-        self.dataset = args.dataset
         self.infer_mode = args.infer_mode
         self.fc_mode = args.fc_mode
 
@@ -382,7 +381,7 @@ class Evaluator:
     async def debug(self):
         # mcp_list_debug = ["filesystem", "fetch", "time"]
         mcp_list_debug = ["variflight", "amap-maps", "exa", "filesystem"]
-        # mcp_list_debug = ["amap-maps", "exa"]
+        # mcp_list_debug = ['dataset-viewer', 'macrostrat', 'world_bank', 'simple-arxiv']
         
         tools = await self.runner.connect(mcp_list_debug)
         tools.extend(CodeExecutionToolkit(sandbox="subprocess", verbose=False).get_tools())
@@ -451,7 +450,6 @@ if __name__ == "__main__":
     parser.add_argument("--tool_path", type=str, default="tool_full.json", help="MCP configuration file path.")
     parser.add_argument("--suffix", type=str, default="")
     parser.add_argument("--inout_path", type=str, default="")
-    parser.add_argument("--dataset", type=str, default="1step")
     parser.add_argument("--infer_mode", type=str, default="oracle", help="Three mode: oracle, standard, maxscale")
     parser.add_argument("--fc_mode", type=str, default="FC")
     parser.add_argument("--eval_mode", type=str, default="sequential")

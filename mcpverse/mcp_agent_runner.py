@@ -186,6 +186,12 @@ class MCPAgentRunner:
                     extra_body={"enable_thinking": False},
                 ),
             )
+        elif self.model_name == 'gpt-5':
+            self.model = ModelFactory.create(
+                model_platform=ModelPlatformType.AZURE,
+                model_type='gpt-5',
+                model_config_dict=dict(max_completion_tokens=8 * 1024),
+            )
         else:
             raise ValueError(f"Model {self.model_name} not supported")
         
@@ -311,7 +317,7 @@ You are provided with function signatures within <tools></tools> XML tags:
         if response.terminated:
             output = {
                 'answer': response.info['termination_reasons'][0],
-                'memory': str(response.info['tool_calls'][-1])
+                'memory': ""
             }
         else:
             output = {

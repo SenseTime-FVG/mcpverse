@@ -1030,8 +1030,15 @@ class MCPPromptAgent(BaseAgent):
                         external_tool_call_requests = []
                     external_tool_call_requests.append(tool_call_request)
                 else:
-                   
-                    fc_res,tool_call_record = await self._aexecute_tool(tool_call_request)
+                    try:
+                        fc_res,tool_call_record = await self._aexecute_tool(tool_call_request)
+                    except Exception as e:
+                        return self._step_terminate(
+                            accumulated_context_tokens,
+                            tool_call_records,
+                            str(e),
+                        )  
+
                     tool_call_records.append(tool_call_record)
                     
                     fc_results.append(fc_res)
@@ -1688,6 +1695,8 @@ class MCPPromptAgent(BaseAgent):
         func_name = tool_call_request.tool_name
         args = tool_call_request.args
         tool_call_id = tool_call_request.tool_call_id
+        if func_name not in self._internal_tools:
+            raise ValueError(f"Tool '{func_name}' not found.")
         tool = self._internal_tools[func_name]
         import asyncio
         
