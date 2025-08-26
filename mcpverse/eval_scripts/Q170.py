@@ -2,14 +2,13 @@
 
 import os
 
-def run_test(pred, answer) -> bool:
+def run_test(pred, dir_path) -> bool:
     """
-    Verifies that the directory './hello' exists and contains:
+    Verifies that the directory `dir_path` exists and contains:
     - alpha.txt with content 'Hello Alpha'
     - beta.txt with content 'Hello Beta'
     Returns True if all checks pass, False otherwise.
     """
-    dir_path = "./hello"
     alpha_path = os.path.join(dir_path, "alpha.txt")
     beta_path = os.path.join(dir_path, "beta.txt")
 
@@ -28,4 +27,5 @@ def run_test(pred, answer) -> bool:
     with open(beta_path, "r", encoding="utf-8") as f:
         beta_content = f.read().strip()
 
+    print(alpha_content, beta_content)
     return alpha_content == "Hello Alpha" and beta_content == "Hello Beta"

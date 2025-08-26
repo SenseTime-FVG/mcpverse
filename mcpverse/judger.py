@@ -38,12 +38,19 @@ If they are not consistent in meaning, output:
 
 ```
 """.strip()
-        
-        model = ModelFactory.create(
-                model_platform=ModelPlatformType.AZURE,
-                model_type=os.getenv("AZURE_OPENAI_MODEL_TYPE"),
-                model_config_dict=dict(temperature=0.1, max_tokens=10000),
-        )
+        if self.args.judge_model == 'GPT4o':
+            model = ModelFactory.create(
+                    model_platform=ModelPlatformType.AZURE,
+                    model_type='gpt-4o-2024-11-20',
+                    model_config_dict=dict(temperature=0.1, max_completion_tokens=4096),
+            )
+        elif self.args.judge_model == 'QwQ':
+            model = ModelFactory.create(
+                    model_platform=ModelPlatformType.OPENAI_COMPATIBLE_MODEL,
+                    model_type='QwQ',
+                    url=os.getenv("QwQ_API_BASE_URL"),
+                    model_config_dict=dict(temperature=0.1),
+            )
 
         agent = ChatAgent(system_message=judge_sys_prompt, model=model)
         return agent

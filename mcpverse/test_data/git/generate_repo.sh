@@ -16,7 +16,8 @@ git config user.name  "Demo User"
 git config user.email "demo@example.com"
 
 # 初始化并把首分支固定为 main，这样后面 checkout main 一定存在
-git init -b main
+git init
+git checkout -b main
 
 # --------- 2) 提交第一版内容 --------------------------------------
 echo "# Git API Demo" > README.md

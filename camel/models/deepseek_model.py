@@ -277,6 +277,9 @@ class DeepSeekModel(OpenAICompatibleModel):
             messages, response_format, tools
         )
 
+        # import json
+        # print(json.dumps(messages, indent=4, ensure_ascii=False))
+
         request_config['max_tokens'] = 2048
         response = await self._async_client.chat.completions.create(
             messages=messages,

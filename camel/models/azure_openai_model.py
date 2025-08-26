@@ -295,7 +295,7 @@ class AzureOpenAIModel(BaseModelBackend):
         if tools:
             request_config["tools"] = tools
 
-        request_config['max_tokens'] = 16000
+        # request_config['max_tokens'] = 16000
         return self._client.chat.completions.create(
             messages=messages,
             model=self._azure_deployment_name,  # type:ignore[arg-type]
@@ -312,7 +312,6 @@ class AzureOpenAIModel(BaseModelBackend):
         if tools:
             request_config["tools"] = tools
 
-        request_config['max_tokens'] = 16000
         return await self._async_client.chat.completions.create(
             messages=messages,
             model=self._azure_deployment_name,  # type:ignore[arg-type]
@@ -359,11 +358,16 @@ class AzureOpenAIModel(BaseModelBackend):
         if tools is not None:
             request_config["tools"] = tools
 
-        return await self._async_client.beta.chat.completions.parse(
+        # import json
+        # print(json.dumps(messages, indent=4, ensure_ascii=False))
+
+        output =  await self._async_client.beta.chat.completions.parse(
             messages=messages,
             model=self._azure_deployment_name,  # type:ignore[arg-type]
             **request_config,
         )
+
+        return output
 
     def check_model_config(self):
         r"""Check whether the model configuration contains any

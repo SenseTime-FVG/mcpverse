@@ -126,7 +126,7 @@ class MCPAgentRunner:
                 model_platform=ModelPlatformType.OPENAI_COMPATIBLE_MODEL,
                 model_type='MaaS_Sonnet_4',
                 url='https://genaiapi.cloudsway.net/v1/ai/ugLMeREFyehDfnrC',
-                api_key='literal:os.getenv("ANTHROPIC_WS_API_KEY")',
+                api_key=os.getenv("ANTHROPIC_WS_API_KEY"),
                 model_config_dict=dict(
                     max_tokens=60000,                
                 )

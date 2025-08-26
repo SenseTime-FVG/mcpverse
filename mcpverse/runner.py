@@ -61,20 +61,23 @@ class Evaluator:
         self.inout_path = args.inout_path
 
         filename = self.inout_path.split('/')[-1]
-        self.rollout_path = f"records/{filename}.json"
-        self.log_path = f"records/{filename}.log"
+        self.rollout_path = f"logs/{filename}.json"
+        self.log_path = f"logs/{filename}.log"
 
         set_log_file(self.log_path)
         set_log_level(level="INFO")
 
 
     def load_data(self):
-        if os.path.isfile(args.inout_path):
-            df = read_data(args.inout_path)
+        if os.path.isfile(self.inout_path):
+            logger.info(f"resume from {self.inout_path}")
+            df = read_data(self.inout_path)
         else:
             df = read_data('data/mcpverse_benchmark.csv')
 
-        outut_sub_folder = self.model_name + '-' + self.suffix
+        base_name = os.path.basename(self.inout_path)
+        outut_sub_folder = os.path.splitext(base_name)[0]
+
         df = df.applymap(lambda x: x.replace('{OUTPUT_SUB_FOLDER}', outut_sub_folder) if isinstance(x,  str) else x)
 
 
@@ -181,29 +184,30 @@ class Evaluator:
     def evaluate_row(self, index, row):
         eval_method = row.get('eval_method', 'llm_as_a_judge')
         pred = row[f'{self.model_name}-answer']
-        answer_id = row['answer']
+        answer = row['answer']
+        Qid = row['question_id']
         question = row['question']
         score = None
 
         try:
             if eval_method == 'llm_as_a_judge':
-                score, reason = self.judger.judge(question, pred, answer_id)
+                score, reason = self.judger.judge(question, pred, answer)
 
-            elif eval_method == 'test_case':
+            elif eval_method == 'eval_script':
                 reason = ""
                 try:
-                    module = importlib.import_module(f"test_cases.{answer_id}")
+                    logger.info(f"=> import eval_scripts.{Qid}")
+                    module = importlib.import_module(f"eval_scripts.{Qid}")
                 except ModuleNotFoundError as exc:
-                    raise KeyError(f"Test case module '{answer_id}' not found.")
+                    raise KeyError(f"Test case module '{Qid}' not found.")
 
                 try:
-                    passed: bool = module.run_test(pred, "")
+                    passed: bool = module.run_test(pred, answer)
                     score = 1 if passed else 0
                 except Exception as exc:
                     print(f"[TestCaseError] {exc}")
                     score = 0
                     
-
             return {
                 'score': score,
                 'reason': reason
@@ -335,6 +339,9 @@ class Evaluator:
             Qid = row['question_id']
             logger.info(f"=> process: {Qid}")
             
+            if Qid != 'Q171':
+                continue
+
             if not pd.isnull(row[f'{self.model_name}-answer']):
                 logger.info(f"skip {row['question_id']}")
                 continue
@@ -404,6 +411,9 @@ class Evaluator:
             Qid = row['question_id']
             logger.info(f"=> process: {Qid}")
 
+            if Qid != 'Q171':
+                continue
+
             if not pd.isnull(row[f'{self.model_name}-score']):
                 logger.info(f"skip {Qid}")
                 continue
@@ -452,6 +462,7 @@ if __name__ == "__main__":
     parser.add_argument("--inout_path", type=str, default="")
     parser.add_argument("--infer_mode", type=str, default="oracle", help="Three mode: oracle, standard, maxscale")
     parser.add_argument("--fc_mode", type=str, default="FC")
+    parser.add_argument("--judge_model", type=str, default="QwQ")
     parser.add_argument("--eval_mode", type=str, default="sequential")
     parser.add_argument("--tool_test", action="store_true")
     parser.add_argument("--debug", action="store_true")

@@ -2,13 +2,12 @@
 
 import os
 
-def run_test(pred, answer) -> bool:
+def run_test(pred, file_path) -> bool:
     """
-    Verifies Q88: that the file './outputs/a.txt' exists and contains:
+    Verifies Q88: that the file './outputs/{outut_sub_folder}/a.txt' exists and contains:
     - The exact content: 'this is a sample text'
     Returns True if the check passes, False otherwise.
     """
-    file_path = "./outputs/a.txt"
 
     # Check if file exists
     if not os.path.isfile(file_path):
