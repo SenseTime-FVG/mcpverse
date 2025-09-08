@@ -156,3 +156,16 @@ self.model = ModelFactory.create(
 The default score model is `GPT-4o-20241120`, you can change it by editing `mcpverse/judger.py`
 
 
+## Citation
+If you find this work useful, please cite our paper:
+```bibtex
+@misc{lei2025mcpverse,
+    title={MCPVerse: An Expansive, Real-World Benchmark for Agentic Tool Use}, 
+    author={Fei Lei and Yibo Yang and Wenxiu Sun and Dahua Lin},
+    year={2025},
+    eprint={2508.16260},
+    archivePrefix={arXiv},
+    primaryClass={cs.AI},
+    url={https://arxiv.org/abs/2508.16260}, 
+}
+```
