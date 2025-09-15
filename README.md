@@ -6,8 +6,10 @@
 
 
 
+
 ## Overview
-MCPVerse is a comprehensive benchmark built on a large-scale set of executable, real-world tools. 
+![MCPVerse Overview](assets/overview.png)
+MCPVerse is a comprehensive benchmark built on a large-scale set of executable, real-world tools. With three evaluation modes, it tests LLMs from using a minimal, per-question toolset to mounting 550+ tools at once—approaching an OS-like environment. MCPVerse thus provides a realistic, execution-grounded benchmark of current LLM agentic capabilities.
 
 The evaluation system is build on top of [CAMEL](https://github.com/camel-ai/camel), thanks to their excellent work.
 
