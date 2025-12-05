@@ -99,6 +99,12 @@ class MCPAgentRunner:
                 model_type=ModelType.DEEPSEEK_CHAT,
                 model_config_dict=dict(temperature=0.1, max_tokens=60000),
             )
+        elif self.model_name == 'deepseek-v3.2':
+            self.model = ModelFactory.create(
+                model_platform=ModelPlatformType.DEEPSEEK,
+                model_type=ModelType.DEEPSEEK_CHAT,
+                model_config_dict=dict(temperature=0.1, max_tokens=60000),
+            )
         elif self.model_name == 'deepseek-r1':
             self.model = ModelFactory.create(
                 model_platform=ModelPlatformType.DEEPSEEK,

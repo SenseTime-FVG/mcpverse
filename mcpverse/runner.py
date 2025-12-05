@@ -15,7 +15,7 @@ import importlib
 import asyncio
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+from openai.types.chat import ChatCompletion
 
 from camel.toolkits import CodeExecutionToolkit
 from camel.logger import get_logger, set_log_level, set_log_file
@@ -28,7 +28,7 @@ from mcp_agent_runner import MCPAgentRunner
 
 logger = get_logger(__name__)
 
-
+TEST_ID='all'
 class Evaluator:
     def __init__(self, args):
         self.args = args
@@ -46,6 +46,7 @@ class Evaluator:
         self.lock = Lock()
         self.parallel = args.parallel
         self.eval_mode = args.eval_mode
+        self.dataset_path = args.dataset_path
 
     def setup(self):
         self.model_name = args.model_name
@@ -57,9 +58,9 @@ class Evaluator:
 
         self.tool_path = args.tool_path
         time_str = datetime.today().strftime('%Y-%m-%d')
-        # self.reference_path = f'tmp/Qlist-{time_str}.xlsx'
+        
         self.inout_path = args.inout_path
-
+        self.dataset_path = args.dataset_path
         filename = self.inout_path.split('/')[-1]
         self.rollout_path = f"logs/{filename}.json"
         self.log_path = f"logs/{filename}.log"
@@ -73,7 +74,10 @@ class Evaluator:
             logger.info(f"resume from {self.inout_path}")
             df = read_data(self.inout_path)
         else:
-            df = read_data('data/mcpverse_benchmark.csv')
+            if self.dataset_path:
+                df = read_data(self.dataset_path)
+            else:
+                df = read_data('data/mcpverse_new.csv')
 
         base_name = os.path.basename(self.inout_path)
         outut_sub_folder = os.path.splitext(base_name)[0]
@@ -101,6 +105,10 @@ class Evaluator:
         with self.lock:
             if stage == 'infer':
                 self.df.loc[index, f'{self.model_name}-answer'] = results['answer']
+                
+                for idx, item in enumerate(results["memory"]):
+                    if isinstance(item, ChatCompletion):
+                        results["memory"][idx] = str(item)
                 self.logs[Qid] = {'rollout': results['memory'], 'answer': results['answer']}
                 write_data(self.inout_path, self.df)
                 with open(self.rollout_path, 'w', encoding='utf-8') as json_file:
@@ -116,7 +124,7 @@ class Evaluator:
                 self.df.loc[index, f'{self.model_name}-score'] = score
                 self.df.loc[index, f'{self.model_name}-reason'] = reason
                 write_data(self.inout_path, self.df)
-                # logger.info(f"=> save to {self.inout_path}")
+
             elif stage == 'get_ref':
                 os.makedirs(os.path.dirname(self.inout_path), exist_ok=True)
                 answer = results['answer']
@@ -155,6 +163,12 @@ class Evaluator:
 
         if '+' in row['MCP']:
             mcps = row['MCP'].split('+')
+            mcp_list = [m.strip() for m in mcps]
+        elif ';' in row['MCP']:
+            mcps = row['MCP'].split(';')
+            mcp_list = [m.strip() for m in mcps]
+        elif '; ' in row['MCP']:
+            mcps = row['MCP'].split(';')
             mcp_list = [m.strip() for m in mcps]
         else:
             mcp_list = [row['MCP']]
@@ -258,11 +272,13 @@ class Evaluator:
 
     def get_target_tools(self):
         if self.infer_mode == 'maxscale':
+ 
             filtered = pd.Series([
-                "amap-maps", "fetch", "mcp-deepwiki", "howtocook-mcp", "variflight", "time", "excel",  "memory", "sqlite", "airbnb", "alphavantage", "calculator", "dataset-viewer", "mindmap", "rijksmuseum-server", "nasa-mcp", "datagov", "simple-arxiv", "world_bank", "weather", "context7", "mcp-server-hotnews", "filesystem", "git", "puppeteer", "Office-PowerPoint-MCP-Server", "exa", "geeknews-mcp-server", "domain-search-server", "mcp-document-reader", "appinsightmcp", "poker_win_calculator", "mcp-paperswithcode", "mcp-visit-korea", "Bazi", "investor", "arxiv-mcp-server", "kospi-kosdaq", "whois", "weibo", "anilist", "berlin-transport", "yahoo-finance", "wuwa-mcp", "pixiv-mcp", "poke-mcp", "FinanceMCP", "bilibili", "opgg-mcp", "metmuseum-mcp", "12306-mcp", "famxplor", "ptcg-mcp", "opendota-mcp-server", "jinko-mcp", "youtube-download", "mcp-server-chinarailway", "mcp_weather_server", "bilibili-mcp-server", "fdp_basic", "macrostrat", "wikipedia", "3rd_party_mcp_server_shuidi"
+                "amap-maps", "fetch", "mcp-deepwiki", "howtocook-mcp", "variflight", "time", "excel",  "memory", "sqlite", "airbnb", "alphavantage", "calculator", "dataset-viewer", "mindmap", "rijksmuseum-server", "nasa-mcp", "datagov", "simple-arxiv", "world_bank", "weather", "context7", "mcp-server-hotnews", "filesystem", "git", "puppeteer", "Office-PowerPoint-MCP-Server", "exa", "domain-search-server", "mcp-document-reader", "appinsightmcp", "poker_win_calculator", "mcp-visit-korea", "Bazi", "investor", "arxiv-mcp-server", "kospi-kosdaq", "whois", "weibo", "anilist", "berlin-transport", "yahoo-finance", "wuwa-mcp", "pixiv-mcp", "poke-mcp", "FinanceMCP", "bilibili", "opgg-mcp", "metmuseum-mcp", "12306-mcp", "famxplor", "ptcg-mcp", "opendota-mcp-server", "jinko-mcp", "youtube-download", "mcp_weather_server", "bilibili-mcp-server", "macrostrat", "wikipedia", "3rd_party_mcp_server_shuidi"
             ])
         elif self.infer_mode == 'standard':
-            filtered = pd.Series(['simple-arxiv', 'context7', 'world_bank', 'git', 'variflight', 'excel', 'dataset-viewer', 'macrostrat', 'kospi-kosdaq', 'wikipedia', 'nasa-mcp', 'howtocook-mcp', 'yahoo-finance', 'weather', 'amap-maps', 'fdp_basic', 'geeknews-mcp-server', 'filesystem', 'whois', 'appinsightmcp', 'sqlite', 'Bazi', 'mcp-paperswithcode', 'wuwa-mcp', 'datagov', 'bilibili', 'calculator', '12306-mcp', 'arxiv-mcp-server', 'weibo', 'poker_win_calculator', 'fetch', 'investor', '3rd_party_mcp_server_shuidi', 'time'])
+
+            filtered = pd.Series(['simple-arxiv', 'context7', 'world_bank', 'git', 'variflight', 'excel', 'dataset-viewer', 'macrostrat', 'kospi-kosdaq', 'wikipedia', 'nasa-mcp', 'howtocook-mcp', 'yahoo-finance', 'weather', 'amap-maps', 'fdp_basic', 'filesystem', 'whois', 'appinsightmcp', 'sqlite', 'Bazi', 'mcp-paperswithcode', 'wuwa-mcp', 'datagov', 'bilibili', 'calculator', '12306-mcp', 'arxiv-mcp-server', 'weibo', 'poker_win_calculator', 'fetch', 'investor', '3rd_party_mcp_server_shuidi', 'time'])
 
         mcp_list = []
         for item in filtered.dropna():  
@@ -277,6 +293,7 @@ class Evaluator:
         # connect mcp
         mcp_list = self.get_target_tools()
         tools = await self.runner.connect(mcp_list)
+       
         failed_clients = self.runner.get_failed_tools()
         logger.info(f"=> failed clients: {failed_clients}")
 
@@ -339,7 +356,8 @@ class Evaluator:
             Qid = row['question_id']
             logger.info(f"=> process: {Qid}")
             
-            if Qid != 'Q171':
+            # breakpoint()
+            if Qid != TEST_ID and TEST_ID != 'all':
                 continue
 
             if not pd.isnull(row[f'{self.model_name}-answer']):
@@ -411,7 +429,7 @@ class Evaluator:
             Qid = row['question_id']
             logger.info(f"=> process: {Qid}")
 
-            if Qid != 'Q171':
+            if Qid != TEST_ID and TEST_ID != 'all':
                 continue
 
             if not pd.isnull(row[f'{self.model_name}-score']):
@@ -469,6 +487,7 @@ if __name__ == "__main__":
     parser.add_argument("--eval", action="store_true")
     parser.add_argument("--parallel", action="store_true")
     parser.add_argument("--workers", type=int, default=10)
+    parser.add_argument("--dataset_path", type=str, default="data/mcpverse_benchmark.csv")
 
 
     args = parser.parse_args()

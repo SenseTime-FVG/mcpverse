@@ -49,6 +49,7 @@ If they are not consistent in meaning, output:
                     model_platform=ModelPlatformType.OPENAI_COMPATIBLE_MODEL,
                     model_type='QwQ',
                     url=os.getenv("QwQ_API_BASE_URL"),
+                    api_key=os.getenv("QwQ_API_KEY"),
                     model_config_dict=dict(temperature=0.1),
             )
 
