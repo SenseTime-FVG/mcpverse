@@ -384,11 +384,6 @@ Homepage = "https://www.camel-ai.org/"
 Repository = "https://github.com/camel-ai/camel"
 Documentation = "https://docs.camel-ai.org"
 
-[tool.uv]
-default-groups = [
-    "dev",
-    "docs",
-]
 
 [tool.hatch.build.targets.sdist]
 include = ["camel"]
