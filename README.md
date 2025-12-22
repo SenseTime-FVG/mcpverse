@@ -74,14 +74,16 @@ ANTHROPIC_API_KEY="YOUR_API_KEY"
 
 1. Prepare test data
     ```bash
-    cd test_data
-    chmod +x generate_repo.sh
-    ./generate_repo.sh
+    cd mcpverse
+    chmod +x test_data/git/generate_repo.sh
+    ./test_data/git/generate_repo.sh
     ```
 
-2. Get reference answers for time-sensitive tasks
+2. Get reference answers for time-sensitive tasks (skip this step if using time-invariant dataset)
     ```bash
-    python runner.py --mode get_ref --inout_path results/input_with_ref.csv
+    python runner.py --mode get_ref \
+        --dataset_path data/mcpverse_time_sensitive.csv \
+        --inout_path results/input_with_ref.csv
     ```
 
 #### Running

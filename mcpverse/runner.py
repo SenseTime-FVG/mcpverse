@@ -387,6 +387,7 @@ class Evaluator:
     
     def get_references(self):
         """Get all reference answers"""
+        logger.info("=> Starting getting reference answer")
         for i, row in self.df.iterrows():
             if row.get('time-sensitive') != 'No':
                 continue
@@ -406,6 +407,7 @@ class Evaluator:
                     self.dump_results('get_ref', i, qid, results)
             except Exception as e:
                 logger.error(f"===> Failed!! {qid}: {ref_id}/{e}")
+        logger.info("=>[Done] Getting reference answer")
     
     def get_target_tools(self) -> List[str]:
         """Get target tool list"""

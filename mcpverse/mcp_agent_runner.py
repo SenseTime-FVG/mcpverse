@@ -42,8 +42,6 @@ class MCPAgentRunner:
         self.tools = []
 
 
-        self.setup()
-
     def _load_mcp_config(self, mcp_list: List) -> dict:
         config_path = Path(__file__).parent / self.tool_path
 
@@ -84,12 +82,6 @@ class MCPAgentRunner:
                 if tool in full_config.get("mcpServers", {})
             }
             return {"mcpServers": selected}
-
-    def setup(self):
-        logger.info("=> setup")
-        self._init_model()
-        logger.info("=> mcp init")
-
 
     def _init_model(self):
         logger.info(f"=> load model: {self.model_name}")
@@ -200,9 +192,14 @@ class MCPAgentRunner:
             )
         else:
             raise ValueError(f"Model {self.model_name} not supported")
-        
+    
+    def _ensure_model(self):
+        """Ensure model is initialized (lazy loading)"""
+        if self.model is None:
+            self._init_model()
 
     def build_agent(self, tools):
+        self._ensure_model()
         sys_msg = """
 You are a helpful assistant. your goal is to complete a task. Please note that the task may be very complicated. Do not attempt to solve the task by single step. Here are some tips may help you:
 <tips>
@@ -274,6 +271,7 @@ You are provided with function signatures within <tools></tools> XML tags:
 
 """
 
+        self._ensure_model()
         agent = MCPPromptAgent(
             system_message=sys_msg2, 
             model=self.model,
@@ -356,7 +354,6 @@ You are provided with function signatures within <tools></tools> XML tags:
 
 
     async def debug(self):
-        self.setup()
         await self.connect()
         tools = [*self.mcp_toolkit.get_tools()]
         logger.info(f"=> total tools:  {len(tools)}")
@@ -366,7 +363,7 @@ You are provided with function signatures within <tools></tools> XML tags:
         await self.disconnect()
         
     def debug_sync(self, task):
-        self.setup()
+        self._ensure_model()
         with self.mcp_toolkit:
             tools=[*self.mcp_toolkit.get_tools()]
             agent = self.build_mcp_runner(tools, self.model)
