@@ -242,7 +242,7 @@ class MCPToolkit(BaseToolkit):
                     # raise MCPConnectionError(error_msg) from e
 
             self._is_connected = True
-            msg = f"Successfully connected to {len(self.clients)} MCP servers"
+            msg = f"Finally connected to {len(self.clients)} MCP servers"
             logger.info(msg)
             return self
 

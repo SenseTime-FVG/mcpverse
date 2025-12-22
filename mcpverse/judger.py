@@ -19,7 +19,7 @@ class LLMJudger:
 
     def build_judger(self):
         judge_sys_prompt = """
-You are a grading assistant. Your task is to evaluate whether a model output and a reference answer are semantically consistent. Please note: the expressions do not need to be exactly the same — as long as the meanings are the same or equivalent, they should be considered consistent.
+You are a grading assistant. Your task is to evaluate whether a model output and a reference answer are semantically consistent. Please note: the expressions do not need to be exactly the same — as long as the meanings are the same or equivalent, they should be considered consistent. Even if the model output and the reference answer are written in different languages, they should still be considered consistent as long as their meanings are the same or equivalent.
 
 If they are consistent in meaning, output the score in the following JSON format, before you output the score, you should give your reason first.
 

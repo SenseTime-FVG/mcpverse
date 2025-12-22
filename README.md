@@ -5,6 +5,10 @@
 [![arXiv](https://img.shields.io/badge/cs.AI-arXiv%3A2508.16260-B31B1B.svg?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2508.16260)
 
 
+## Updates
+### 2025.12.22
+
+Some MCP servers in our original tool pool have been deprecated or taken offline, which makes a subset of questions in the original dataset no longer executable/reproducible. To address this, we release an updated version of the dataset. Please refer to `mcpverse/data/mcpverse_time_invariant_v1.1.csv`. Note that this version only includes **time-invariant** questions.
 
 
 ## Overview
@@ -12,28 +16,6 @@
 MCPVerse is a comprehensive benchmark built on a large-scale set of executable, real-world tools. With three evaluation modes, it tests LLMs from using a minimal, per-question toolset to mounting 550+ tools at once—approaching an OS-like environment. MCPVerse thus provides a realistic, execution-grounded benchmark of current LLM agentic capabilities.
 
 The evaluation system is build on top of [CAMEL](https://github.com/camel-ai/camel), thanks to their excellent work.
-
-## Leadboard
-| Model               | Context Window | Max Tool Count | **Oracle Mode** SR | L1  | L2  | L3  | **Standard Mode** SR | L1  | L2  | L3  | **Max-Scale Mode** SR | L1  | L2  | L3  |
-|----------------------|----------------|----------------|-------------------:|----:|----:|----:|---------------------:|----:|----:|----:|----------------------:|----:|----:|----:|
-| **Claude-4-Sonnet**  | 200k           | —              | 62.3 | 71.6 | 62.7 | 52.5 | **62.4** | **75.9** | 60.4 | **50.9** | 44.2 | 45.8 | 40.5 | 46.2 |
-| **GLM-4.5**          | 128k           | —              | 55.0 | 70.9 | 58.5 | 35.6 | **59.1** | 67.4 | **60.7** | 49.2 | — | — | — | — |
-| **Qwen3-235B-2507**  | 1M             | —              | 44.8 | 62.5 | 44.8 | 27.1 | **53.2** | 63.9 | 51.8 | 43.9 | 31.6 | 44.3 | 23.7 | 26.7 |
-| **DeepSeek-V3.1-Terminus** | 128k     | 128            | 56.6 | 64.4 | 57.3 | 48.3 | **52.1** | 62.0 | 49.4 | 45.0 | — | — | — | — |
-| **DeepSeek-R1-0528** | 64k            | 128            | 56.4 | 70.5 | 56.4 | 42.4 | **49.9** | 65.1 | 47.4 | 37.3 | — | — | — | — |
-| **Gemini-2.5-Pro**   | 1M             | 512            | 48.7 | 66.3 | 42.6 | 37.3 | **45.3** | 62.4 | 41.9 | 31.6 | 31.4* | 37.7* | 35.7* | 20.8* |
-| **DeepSeek-V3-0324** | 64k            | 128            | 46.8 | 62.7 | 45.1 | 32.7 | **32.2** | 47.0 | 27.7 | 22.0 | — | — | — | — |
-| **Qwen3-235B-A22B**  | 128k           | —              | 42.1 | 61.6 | 34.8 | 30.0 | **37.7** | 52.3 | 35.9 | 25.0 | — | — | — | — |
-| **GPT-4o-20241120**  | 128k           | 128            | 42.1 | 59.1 | 40.2 | 27.1 | **31.4*** | 37.7* | 35.7* | 20.8* | — | — | — | — |
-| **GPT-5**            | 400k           | —              | **68.1** | **80.5** | **67.8** | **55.9** | **23.4*** | 30.6* | 19.7* | 20.0* | — | — | — | — |
-| **Qwen3-30B-A3B**    | 128k           | —              | 27.7 | 46.5 | 18.1 | 18.3 | **18.9** | 27.9 | 12.9 | 15.8 | — | — | — | — |
-| **Kimi-K2-0711**     | 128k           | 128            | 59.4 | 70.9 | 59.8 | 47.5 | **16.3*** | 24.4* | 24.4* | 0.0* | — | — | — | — |
-
-
-*Notes:* Context = max context length; Tools = native tool limit. Dashes (–) mean not evaluated for that mode. Scores with `*` used prompt-based function calling instead of native tools due to context limits. Bold numbers are column bests.
-
-
-
 
 ## Installation
 1. Clone the repository
@@ -88,63 +70,68 @@ ANTHROPIC_API_KEY="YOUR_API_KEY"
 
 ### Run Evaluation
 
-#### Debug Mode
-To run a test evaluation on a debug mode, run
-```bash
-cd mcpverse
-# Q: How many files in {MCPVerse_ROOT}/test_data/txt ? 
-# Mounted MCP list:  ["filesystem", "fetch", "time"]
-python runner.py --mode debug --model_name deepseek-v3
-```
+#### Preparation
 
-#### Running Benchmark
-1. prepare test_data
+1. Prepare test data
     ```bash
     cd test_data
     chmod +x generate_repo.sh
     ./generate_repo.sh
     ```
 
-
-2. Get reference for time-sensetive tasks
+2. Get reference answers for time-sensitive tasks
     ```bash
     python runner.py --mode get_ref --inout_path results/input_with_ref.csv
     ```
 
-3. inference
-    run **oracle** mode using FC
+#### Running
+
+3. Quick test (debug mode)
     ```bash
-    python runner.py --mode infer --infer_mode oracle --fc_mode FC --model_name deepseek-v3 --inout_path results/input_with_ref.csv
+    python runner.py --mode debug --model_name deepseek-v3.2 
     ```
 
-
-    run **stanrdard** mode using FC
+4. Inference
+    
+    Run **Oracle** mode with Function Calling (FC):
     ```bash
-    python runner.py --mode infer --infer_mode standard --fc_mode FC --model_name deepseek-v3 --inout_path results/input_with_ref.csv
+    python runner.py --mode infer \
+        --infer_mode oracle --fc_mode FC \
+        --model_name deepseek-v3.2 \
+        --dataset_path data/mcpverse_time_invariant_v1.1.csv \
+        --inout_path results/deepseek_oracle.csv
     ```
 
-    run **standard** mode using Prompt
+    Run **Standard** mode with FC by changing `--infer_mode` to `standard`:
     ```bash
-    python runner.py --mode infer --infer_mode standard --fc_mode Prompt --model_name deepseek-v3 --inout_path results/input_with_ref.csv
+    --infer_mode standard
     ```
 
-
-4. evaluate
-    setup judge model at `judger.py` and run
+    Run **Standard** mode with Prompt-based tool use by changing `--fc_mode` to `Prompt`:
     ```bash
-    python runner.py --mode eval --model_name deepseek-v3 --inout_path results/input_with_ref.csv --judege_model GPT4o
+    --fc_mode Prompt
     ```
 
-5. calculate score
+5. Evaluate
+    
+    Configure the judge model in `judger.py`, then run:
+    ```bash
+    python runner.py --mode eval \
+        --model_name deepseek-v3.2 \
+        --inout_path results/deepseek_oracle.csv \ 
+        --judge_model GPT4o
+    ```
+
+6. Calculate scores
     ```bash
     python stats.py -i results/gpt5_input_with_ref_oracle.csv
     ```
 
 
-Tips:
-1. Both inference and evaluation stages can **automatically resume** from inout file.
-2. The chat history during inference will be saved in the `logs` folder.
-3. The model's intermediate output files will be saved in the `outputs` folder.
+**Tips:**
+1. Both inference and evaluation stages support **automatic resumption** from the inout file.
+2. Chat histories during inference are saved in the `logs/` directory.
+3. Intermediate model outputs are saved in the `outputs/` directory.
 
 
 ### Add New Model

@@ -104,10 +104,11 @@
             }
         },
         "calculator": {
-            "command": "uvx",
-            "args": [
-                "mcp-server-calculator"
-            ]
+          "command": "npx",
+          "args": [
+            "mcp-remote",
+            "https://berlin-transport.mcp-tools.app/sse"
+          ]
         },
         "dataset-viewer": {
             "command": "uv",
@@ -154,12 +155,18 @@
             ],
             "env": {}
         },
-        "simple-arxiv": {
-            "command": "python",
+        "paper_search_server": {
+            "command": "uv",
             "args": [
-                "-m",
-                "mcp_simple_arxiv"
-            ]
+              "run",
+              "--directory",
+              "${MCPVERSE_ROOT}/mcpverse/servers/paper-search-mcp",
+              "-m",
+              "paper_search_mcp.server"
+            ],
+            "env": {
+              "SEMANTIC_SCHOLAR_API_KEY": "" 
+            }
         },
         "world_bank": {
             "command": "uv",
@@ -230,15 +237,9 @@
             ]
         },
         "exa": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@smithery/cli@latest",
-                "run",
-                "exa",
-                "--key",
-                "${SMITHERY_API_KEY}"
-            ]
+          "type": "http",
+          "url": "https://mcp.exa.ai",
+          "headers": {}
         },
         "geeknews-mcp-server": {
             "command": "npx",
@@ -274,26 +275,11 @@
             ]
         },
         "appinsightmcp": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@smithery/cli@latest",
-                "run",
-                "@JiantaoFu/appinsightmcp",
-                "--key",
-                "${SMITHERY_API_KEY}"
-            ]
-        },
-        "poker_win_calculator": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@smithery/cli@latest",
-                "run",
-                "@watsonchua/poker_win_calculator",
-                "--key",
-                "${SMITHERY_API_KEY}"
-            ]
+          "command": "npx",
+          "args": [
+            "-y",
+            "@jeromyfu/app-insight-mcp"
+          ]
         },
         "mcp-paperswithcode": {
           "command": "npx",
@@ -351,10 +337,8 @@
             ]
           },
           "weibo": {
-            "command": "uvx",
-            "args": [
-              "mcp-server-weibo"
-            ]
+            "command": "npx",
+            "args": ["mcp-server-weibo"]
           },
           "anilist": {
             "command": "npx",
@@ -444,11 +428,7 @@
             "command": "npx",
             "args": [
               "-y",
-              "@smithery/cli@latest",
-              "run",
-              "@mikechao/metmuseum-mcp",
-              "--key",
-              "${SMITHERY_API_KEY}"
+              "metmuseum-mcp"
             ]
           },
           "12306-mcp": {
@@ -472,17 +452,6 @@
               "@smithery/cli@latest",
               "run",
               "@jlgrimes/ptcg-mcp",
-              "--key",
-              "${SMITHERY_API_KEY}"
-            ]
-          },
-          "opendota-mcp-server": {
-            "command": "npx",
-            "args": [
-              "-y",
-              "@smithery/cli@latest",
-              "run",
-              "@lieyanqzu/opendota-mcp-server",
               "--key",
               "${SMITHERY_API_KEY}"
             ]

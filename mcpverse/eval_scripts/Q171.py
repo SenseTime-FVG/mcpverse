@@ -14,6 +14,7 @@ def run_test(pred, file_path) -> bool:
     """
     """
     if not os.path.exists(file_path):
+        print(f"File {file_path} does not exist")
         return False
 
     with open(file_path, "r", encoding="utf-8") as f:
