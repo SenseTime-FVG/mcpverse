@@ -153,8 +153,11 @@ class Evaluator:
             self.log_path = "logs/debug.log"
         else:
             filename = os.path.basename(self.inout_path)
-            self.rollout_path = f"logs/{filename}.json"
-            self.log_path = f"logs/{filename}.log"
+            # self.rollout_path = f"logs/{filename}.json"
+            # self.log_path = f"logs/{filename}.log"
+            self.rollout_path = f"{self.args.result_save_path}/logs/{filename}.json"
+            self.log_path = f"{self.args.result_save_path}/logs/{filename}.log"
+            os.makedirs(self.args.result_save_path + "/logs", exist_ok=True)
         
         os.makedirs('results', exist_ok=True)
         os.makedirs('logs', exist_ok=True)
@@ -587,6 +590,17 @@ def parse_args():
     parser.add_argument("--test_id", type=str, default="all", help="Specify question ID to test")
     parser.add_argument("--debug_mcp", nargs='+', default=None, help="MCP list for debug mode")
     parser.add_argument("--debug_question", type=str, default=None, help="Question for debug mode")
+    
+    # lightllm 添加的参数
+    parser.add_argument("--lightllm_url", type=str, default="http://127.0.0.1:8088/v1")
+    
+    parser.add_argument("--top_p", type=float, default=0.95, help="Top-p parameter for LightLLM")
+    parser.add_argument("--top_k", type=int, default=20, help="Top-k parameter for LightLLM")
+    parser.add_argument("--temperature", type=float, default=0.6, help="Temperature parameter for LightLLM")
+    parser.add_argument("--max_new_tokens", type=int, default=8192, help="Maximum new tokens parameter for LightLLM")
+    parser.add_argument("--enable_thinking", action="store_true", default=False, help="Whether to use thinking for LightLLM")
+    
+    parser.add_argument("--result_save_path", type=str, default="results", help="Result save path")
     
     return parser.parse_args()
 

@@ -190,6 +190,21 @@ class MCPAgentRunner:
                 model_type='gpt-5',
                 model_config_dict=dict(max_completion_tokens=8 * 1024),
             )
+        elif self.model_name.endswith('lightllm'):
+            self.model = ModelFactory.create(
+                model_platform=ModelPlatformType.OPENAI_COMPATIBLE_MODEL,
+                model_type=self.model_name,
+                url=self.args.lightllm_url,
+                model_config_dict=dict(
+                    max_tokens=self.args.max_new_tokens,
+                    temperature=self.args.temperature,
+                    top_p=self.args.top_p,
+                    extra_body={
+                        "thinking": {"type": "enabled"},
+                        "enable_thinking": self.args.enable_thinking
+                    },
+                )
+            )
         else:
             raise ValueError(f"Model {self.model_name} not supported")
     
