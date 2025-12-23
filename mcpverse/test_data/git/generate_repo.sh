@@ -2,6 +2,10 @@
 set -e  # 只要有一步出错就停下来，方便发现问题
 set -u  # 用到未定义变量时报错
 
+# 切换到脚本所在目录，确保无论从哪里调用都能正确工作
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 # --------- 0) 可选：全局只做一次的配置（已经配过可删除）---------
 # git config --global user.name  "Your Name"
 # git config --global user.email "you@example.com"
@@ -11,13 +15,14 @@ rm -rf git-api-demo
 mkdir  git-api-demo
 cd     git-api-demo
 
+# 初始化并把首分支固定为 main，这样后面 checkout main 一定存在
+git init
+git checkout -b main
+
 # 本地(仅这个仓库)设置用户名邮箱，避免污染全局
 git config user.name  "Demo User"
 git config user.email "demo@example.com"
 
-# 初始化并把首分支固定为 main，这样后面 checkout main 一定存在
-git init
-git checkout -b main
 
 # --------- 2) 提交第一版内容 --------------------------------------
 echo "# Git API Demo" > README.md
