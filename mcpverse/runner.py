@@ -290,8 +290,14 @@ class Evaluator:
             
             return await self.runner.run_task(agent, task)
         except Exception as e:
-            logger.error(f"Prediction failed ({row.get('question_id', 'unknown')}): {e}")
-            return None
+            qid = row.get('question_id', 'unknown')
+            error_msg = f"[ERROR] Prediction failed: {str(e)}"
+            logger.error(f"Prediction failed ({qid}): {e}")
+            # Return error as answer to avoid infinite retries
+            return {
+                'answer': error_msg,
+                'memory': []
+            }
     
     def _predict_with_tools(self, index: int, row, tools) -> Optional[Dict[str, Any]]:
         """Synchronous prediction with tools"""
@@ -301,8 +307,14 @@ class Evaluator:
             logger.info(f"=> {row['question_id']}: {task}")
             return self.runner.run_task_sync(agent, task)
         except Exception as e:
-            logger.error(f"Prediction failed: {e}")
-            return None
+            qid = row.get('question_id', 'unknown')
+            error_msg = f"[ERROR] Prediction failed: {str(e)}"
+            logger.error(f"Prediction failed ({qid}): {e}")
+            # Return error as answer to avoid infinite retries
+            return {
+                'answer': error_msg,
+                'memory': []
+            }
     
     def predict_row_sync(self, index: int, row) -> tuple:
         """Synchronous prediction for a single row (Oracle mode)"""
@@ -335,8 +347,13 @@ class Evaluator:
                 return index, self._predict_with_tools(index, row, tools)
                 
         except Exception as e:
+            error_msg = f"[ERROR] Prediction failed: {str(e)}"
             logger.error(f"predict_row_sync failed ({qid}): {e}")
-            return index, None
+            # Return error as answer to avoid infinite retries
+            return index, {
+                'answer': error_msg,
+                'memory': []
+            }
     
     def evaluate_row(self, index: int, row) -> Optional[Dict[str, Any]]:
         """Evaluate a single row"""
