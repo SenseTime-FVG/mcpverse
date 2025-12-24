@@ -122,6 +122,8 @@ class Evaluator:
         self._setup_paths()
         self._setup_logging()
         
+        # Pass inout_folder as output_folder for MCPAgentRunner
+        args.output_folder = args.inout_folder
         self.runner = MCPAgentRunner(args)
         self.judger = LLMJudger(args)
         
@@ -137,30 +139,34 @@ class Evaluator:
     def _setup_paths(self):
         """Set up file paths"""
         self.model_name = self.args.model_name
-        self.suffix = self.args.suffix
         self.infer_mode = self.args.infer_mode
         self.fc_mode = self.args.fc_mode
         self.workers = self.args.workers
         self.tool_path = self.args.tool_path
-        self.inout_path = self.args.inout_path
+        self.inout_folder = self.args.inout_folder
         self.dataset_path = self.args.dataset_path
-        self.parallel = self.args.parallel
-        self.eval_mode = self.args.eval_mode
+        self.eval_parallel = self.args.eval_parallel
         
-        # Use default log path in debug mode
+        # Set up paths based on inout_folder
         if 'debug' in self.args.mode:
-            self.rollout_path = "logs/debug.json"
-            self.log_path = "logs/debug.log"
+            self.output_dir = "outputs/debug"
+            self.inout_path = f"{self.output_dir}/debug.csv"
+            self.log_dir = f"{self.output_dir}/logs"
+            self.rollout_path = f"{self.log_dir}/debug.json"
+            self.log_path = f"{self.log_dir}/debug.log"
         else:
-            filename = os.path.basename(self.inout_path)
-            # self.rollout_path = f"logs/{filename}.json"
-            # self.log_path = f"logs/{filename}.log"
-            self.rollout_path = f"{self.args.result_save_path}/logs/{filename}.json"
-            self.log_path = f"{self.args.result_save_path}/logs/{filename}.log"
-            os.makedirs(self.args.result_save_path + "/logs", exist_ok=True)
+            # self.output_dir = f"outputs/{self.inout_folder}"
+            self.output_dir = f"{self.args.result_save_path}/{self.inout_folder}"
+            self.inout_path = f"{self.output_dir}/{self.inout_folder}.csv"
+            self.log_dir = f"{self.output_dir}/logs"
+            self.rollout_path = f"{self.log_dir}/{self.inout_folder}.json"
+            self.log_path = f"{self.log_dir}/{self.inout_folder}.log"
         
-        os.makedirs('results', exist_ok=True)
-        os.makedirs('logs', exist_ok=True)
+        # Create output directories
+        os.makedirs(self.output_dir, exist_ok=True)
+        os.makedirs(self.log_dir, exist_ok=True)
+        os.makedirs(f"{self.output_dir}/tmp", exist_ok=True)
+        os.makedirs(f"{self.output_dir}/task_outputs", exist_ok=True)
         
     def _setup_logging(self):
         """Set up logging"""
@@ -176,11 +182,8 @@ class Evaluator:
             dataset_path = self.dataset_path
             df = read_data(dataset_path)
         
-        # Replace output subfolder placeholder
-        base_name = os.path.basename(self.inout_path)
-        output_sub_folder = os.path.splitext(base_name)[0]
-        
-        df = df.applymap(lambda x: x.replace('{OUTPUT_SUB_FOLDER}', output_sub_folder) if isinstance(x,  str) else x)
+        # Replace output subfolder placeholder with inout_folder
+        df = df.applymap(lambda x: x.replace('{OUTPUT_SUB_FOLDER}', self.inout_folder) if isinstance(x, str) else x)
         
         # Load rollout logs
         logs = {}
@@ -264,7 +267,7 @@ class Evaluator:
     def _dump_eval_results(self, index: int, results: Dict[str, Any]):
         """Save evaluation results"""
         self.df.loc[index, f'{self.model_name}-score'] = results.get('score')
-        self.df.loc[index, f'{self.model_name}-reason'] = results.get('reason', '')
+        self.df.loc[index, 'judge-reason'] = results.get('reason', '')
         write_data(self.inout_path, self.df)
     
     def _dump_ref_results(self, index: int, results: Dict[str, Any]):
@@ -288,8 +291,14 @@ class Evaluator:
             
             return await self.runner.run_task(agent, task)
         except Exception as e:
-            logger.error(f"Prediction failed ({row.get('question_id', 'unknown')}): {e}")
-            return None
+            qid = row.get('question_id', 'unknown')
+            error_msg = f"[ERROR] Prediction failed: {str(e)}"
+            logger.error(f"Prediction failed ({qid}): {e}")
+            # Return error as answer to avoid infinite retries
+            return {
+                'answer': error_msg,
+                'memory': []
+            }
     
     def _predict_with_tools(self, index: int, row, tools) -> Optional[Dict[str, Any]]:
         """Synchronous prediction with tools"""
@@ -299,8 +308,14 @@ class Evaluator:
             logger.info(f"=> {row['question_id']}: {task}")
             return self.runner.run_task_sync(agent, task)
         except Exception as e:
-            logger.error(f"Prediction failed: {e}")
-            return None
+            qid = row.get('question_id', 'unknown')
+            error_msg = f"[ERROR] Prediction failed: {str(e)}"
+            logger.error(f"Prediction failed ({qid}): {e}")
+            # Return error as answer to avoid infinite retries
+            return {
+                'answer': error_msg,
+                'memory': []
+            }
     
     def predict_row_sync(self, index: int, row) -> tuple:
         """Synchronous prediction for a single row (Oracle mode)"""
@@ -333,8 +348,13 @@ class Evaluator:
                 return index, self._predict_with_tools(index, row, tools)
                 
         except Exception as e:
+            error_msg = f"[ERROR] Prediction failed: {str(e)}"
             logger.error(f"predict_row_sync failed ({qid}): {e}")
-            return index, None
+            # Return error as answer to avoid infinite retries
+            return index, {
+                'answer': error_msg,
+                'memory': []
+            }
     
     def evaluate_row(self, index: int, row) -> Optional[Dict[str, Any]]:
         """Evaluate a single row"""
@@ -504,12 +524,10 @@ class Evaluator:
         
         try:
             results = await self.predict_row(0, row, tools)
-            if results:
-                logger.info(f"Debug result: {results.get('answer')}")
         finally:
             await self.runner.disconnect()
     
-    def eval_sequential(self):
+    def _run_eval_sequential(self):
         """Sequential evaluation"""
         for index, row in self.df.iterrows():
             qid = row['question_id']
@@ -528,7 +546,7 @@ class Evaluator:
             if results is not None:
                 self.dump_results('eval', index, qid, results)
     
-    def eval_parallel(self):
+    def _run_eval_parallel(self):
         """Parallel evaluation"""
         futures = {}
         
@@ -547,13 +565,30 @@ class Evaluator:
                 except Exception as e:
                     logger.error(f"=> Unhandled error in worker thread: {e}")
     
+    
+    def calculate_stats(self):
+        """Calculate stats"""
+        df = self.df
+        score_col = f'{self.model_name}-score'
+        comp_col = 'complexity'
+        df[score_col] = pd.to_numeric(df[score_col], errors="coerce")
+        overall_mean = df[score_col].mean()
+        by_complexity = df.groupby(comp_col, dropna=False)[score_col].mean().reset_index().rename(columns={score_col: "avg_score"}).sort_values("avg_score", ascending=False)
+        print(f"Overall mean: {overall_mean:.4f}")
+        print(by_complexity.to_string(index=False))
+
+
+
     def eval(self):
         """Execute evaluation"""
-        if self.eval_mode == 'parallel':
-            self.eval_parallel()
+        if self.eval_parallel:
+            self._run_eval_parallel()
         else:
-            self.eval_sequential()
-    
+            self._run_eval_sequential()
+
+        # Calculate stats
+        self.calculate_stats()
+
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(description="Run selected MCP tools.")
@@ -568,8 +603,7 @@ def parse_args():
     )
     parser.add_argument("--model_name", type=str, default="deepseek-v3")
     parser.add_argument("--tool_path", type=str, default="tool_full.json")
-    parser.add_argument("--suffix", type=str, default="")
-    parser.add_argument("--inout_path", type=str, default="")
+    parser.add_argument("--inout_folder", type=str, default="", help="Output folder name under outputs/")
     parser.add_argument(
         "--infer_mode",
         type=str,
@@ -578,11 +612,7 @@ def parse_args():
     )
     parser.add_argument("--fc_mode", type=str, default="FC")
     parser.add_argument("--judge_model", type=str, default="QwQ")
-    parser.add_argument("--eval_mode", type=str, default="sequential")
-    parser.add_argument("--tool_test", action="store_true")
-    parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--eval", action="store_true")
-    parser.add_argument("--parallel", action="store_true")
+    parser.add_argument("--eval_parallel", action="store_true", help="Run evaluation in parallel")
     parser.add_argument("--workers", type=int, default=10)
     parser.add_argument("--dataset_path", type=str, default="")
     
@@ -609,9 +639,9 @@ def main():
     """Main function"""
     args = parse_args()
     
-    # Validate arguments: non-debug mode requires inout_path
-    if 'debug' not in args.mode and not args.inout_path:
-        raise ValueError("--inout_path argument is required for non-debug mode")
+    # Validate arguments: non-debug mode requires inout_folder
+    if 'debug' not in args.mode and not args.inout_folder:
+        raise ValueError("--inout_folder argument is required for non-debug mode")
     
     # Create configuration with command line override support
     config = EvaluatorConfig(

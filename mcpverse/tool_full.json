@@ -104,11 +104,8 @@
             }
         },
         "calculator": {
-          "command": "npx",
-          "args": [
-            "mcp-remote",
-            "https://berlin-transport.mcp-tools.app/sse"
-          ]
+          "command": "uvx",
+          "args": ["mcp-server-calculator"]
         },
         "dataset-viewer": {
             "command": "uv",

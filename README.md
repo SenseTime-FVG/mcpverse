@@ -97,11 +97,14 @@ ANTHROPIC_API_KEY="YOUR_API_KEY"
     
     Run **Oracle** mode with Function Calling (FC):
     ```bash
-    python runner.py --mode infer \
-        --infer_mode oracle --fc_mode FC \
+    python runner.py \
+        --mode infer \
+        --infer_mode oracle \
+        --fc_mode FC \
         --model_name deepseek-v3.2 \
+        --judge_model Qwen25-72B \
         --dataset_path data/mcpverse_time_invariant_v1.1.csv \
-        --inout_path results/deepseek_oracle.csv
+        --inout_folder deepseek_v32_oracle
     ```
 
     Run **Standard** mode with FC by changing `--infer_mode` to `standard`:
@@ -114,26 +117,30 @@ ANTHROPIC_API_KEY="YOUR_API_KEY"
     --fc_mode Prompt
     ```
 
+    Run **single case**, add `--test_id Q101` 
+    ```
+    --test_id Q101    
+    ```
+
 5. Evaluate
     
     Configure the judge model in `judger.py`, then run:
     ```bash
-    python runner.py --mode eval \
+    python runner.py \
+        --mode eval \  
+        --infer_mode oracle \
+        --fc_mode FC \
         --model_name deepseek-v3.2 \
-        --inout_path results/deepseek_oracle.csv \ 
-        --judge_model GPT4o
+        --judge_model Qwen25-72B \
+        --dataset_path data/mcpverse_time_invariant_v1.1.csv \
+        --inout_folder deepseek_v32_oracle
     ```
 
-6. Calculate scores
-    ```bash
-    python stats.py -i results/gpt5_input_with_ref_oracle.csv
-    ```
 
 
 **Tips:**
 1. Both inference and evaluation stages support **automatic resumption** from the inout file.
-2. Chat histories during inference are saved in the `logs/` directory.
-3. Intermediate model outputs are saved in the `outputs/` directory.
+2. All outputs are saved in the `outputs/${inout_folder}/` directory.
 
 
 ### Add New Model
@@ -149,7 +156,7 @@ self.model = ModelFactory.create(
 
 
 ### Change Score Model
-The default score model is `GPT-4o-20241120`, you can change it by editing `mcpverse/judger.py`
+The default score model is `Qwen2.5-72B`, you can change it by editing `mcpverse/judger.py`
 
 
 ## Citation
