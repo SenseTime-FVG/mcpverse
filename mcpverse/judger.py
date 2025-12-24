@@ -52,6 +52,16 @@ If they are not consistent in meaning, output:
                     api_key=os.getenv("QwQ_API_KEY"),
                     model_config_dict=dict(temperature=0.1),
             )
+        elif self.args.judge_model == 'Qwen25-72B':
+            model = ModelFactory.create(
+                    model_platform=ModelPlatformType.OPENAI_COMPATIBLE_MODEL,
+                    model_type='Qwen25-72B',
+                    url=os.getenv("QWEN25_72B_BASE_URL"),
+                    api_key=os.getenv("QWEN25_72B_API_KEY"),
+                    model_config_dict=dict(temperature=0.1),
+            )
+
+
 
         agent = ChatAgent(system_message=judge_sys_prompt, model=model)
         return agent

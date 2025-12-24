@@ -803,12 +803,11 @@ class ChatAgent(BaseAgent):
                 )
             
             
-            # 如果messages最近
+            # 如果 messages 太多
             if len(openai_messages) > 40:
                 return self._step_terminate(
-                    e.args[1], tool_call_records, "too_much_rounds"
+                    accumulated_context_tokens, tool_call_records, "too_much_rounds"
                 )
-
 
             # Get response from model backend
             response = self._get_model_response(
@@ -947,13 +946,11 @@ class ChatAgent(BaseAgent):
                     e.args[1], tool_call_records, "max_tokens_exceeded"
                 )
             
-            # 如果messages最近
+            # 如果 messages 太多
             if len(openai_messages) > 40:
                 return self._step_terminate(
-                    e.args[1], tool_call_records, "too_much_rounds"
+                    accumulated_context_tokens, tool_call_records, "too_much_rounds"
                 )
-
-
 
             response = await self._aget_model_response(
                 openai_messages,

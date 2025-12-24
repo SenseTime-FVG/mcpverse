@@ -31,10 +31,9 @@ class MCPAgentRunner:
     def __init__(self, args):
         self.args = args
         self.model_name = args.model_name
-        self.suffix = args.suffix
         self.tool_path = args.tool_path
         # self.selected_tools = args.tools or "all"
-
+        self.output_folder = args.output_folder
 
         self.mcp_toolkit = None
         self.model = None
@@ -160,6 +159,14 @@ class MCPAgentRunner:
                     extra_body={"enable_thinking": False},
                 ),
             )
+        elif self.model_name == '30a3b':
+            self.model = ModelFactory.create(
+                model_platform=ModelPlatformType.OPENAI_COMPATIBLE_MODEL,
+                model_type='30a3b',
+                url='http://10.210.6.10:23232/v1',
+                api_key='xx',
+                model_config_dict=dict(temperature=0.0, max_tokens=32000),
+            )
         elif self.model_name == 'Qwen3-30B-A3B':
             self.model = ModelFactory.create(
                 model_platform=ModelPlatformType.QWEN,
@@ -200,14 +207,14 @@ class MCPAgentRunner:
 
     def build_agent(self, tools):
         self._ensure_model()
-        sys_msg = """
+        sys_msg = f"""
 You are a helpful assistant. your goal is to complete a task. Please note that the task may be very complicated. Do not attempt to solve the task by single step. Here are some tips may help you:
 <tips>
 - your various mcp tools to use, such as search toolkit, map toolkit, document relevant toolkit, code execution toolkit, etc.
 - If one way fails to provide an answer, try other ways or methods. The answer does exists.
 - When looking for specific numerical values (e.g., dollar amounts), prioritize reliable sources and avoid relying only on search snippets.  
 - you can write python code to solve the task if needed.
-- If you want to generate any files, please place them in the `outputs` folder. 
+- If you want to generate temporary files or download temporary files, please place them in the `./outputs/{self.output_folder}/tmp/` folder. 
 - Some tools need internet access. If you run into connection issues while using them, try retrying the request.
 </tips>
 """.strip()
@@ -337,13 +344,25 @@ You are provided with function signatures within <tools></tools> XML tags:
     def run_task_sync(self, agent, task):
         response = agent.step(task)
         if response.terminated:
+            reason = response.info['termination_reasons'][0]
+            logger.info(f"=> Terminated: {reason}")
+            # Use retrieve() to get raw records, then truncate to avoid token limit error
+            try:
+                records = agent.memory.retrieve()
+                # Convert records to OpenAI message format and truncate to last 20
+                memory = [
+                    record.memory_record.to_openai_message() 
+                    for record in records
+                ]
+            except Exception as e:
+                logger.warning(f"Failed to retrieve memory: {e}")
+                memory = []
             return {
-                'answer': response.info['termination_reasons'][0],
-                'memory': agent.memory.get_context()[0]
+                'answer': reason,
+                'memory': memory
             }
         answer = response.msgs[0].content
         memory = agent.memory.get_context()[0]
-        # print(f"\033[94mAnswer: {answer}\033[0m")
         logger.info(f"=> Answer: {answer}")
 
         return {
@@ -391,7 +410,6 @@ if __name__ == "__main__":
     )
     parser.add_argument("--model_name", type=str, default="deepseek-v3")
     parser.add_argument("--tool_path", type=str, default="tool.json")
-    parser.add_argument("--suffix", type=str, default="run")
     parser.add_argument("--dataset", type=str, default="1step")
     parser.add_argument("--question", type=str, default="")
     parser.add_argument("--tool_test", action="store_true")
