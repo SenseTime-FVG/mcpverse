@@ -203,7 +203,7 @@ class MCPAgentRunner:
                 model_type=self.model_name,
                 url=self.args.lightllm_url,
                 model_config_dict=dict(
-                    max_tokens=self.args.max_new_tokens,
+                    max_tokens=32000,
                     temperature=self.args.temperature,
                     top_p=self.args.top_p,
                     extra_body={

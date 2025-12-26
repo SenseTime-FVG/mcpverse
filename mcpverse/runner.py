@@ -155,8 +155,8 @@ class Evaluator:
             self.rollout_path = f"{self.log_dir}/debug.json"
             self.log_path = f"{self.log_dir}/debug.log"
         else:
-            # self.output_dir = f"outputs/{self.inout_folder}"
-            self.output_dir = f"{self.args.result_save_path}/{self.inout_folder}"
+            self.output_dir = f"outputs/{self.inout_folder}"
+            # self.output_dir = f"{self.args.result_save_path}/{self.inout_folder}"
             self.inout_path = f"{self.output_dir}/{self.inout_folder}.csv"
             self.log_dir = f"{self.output_dir}/logs"
             self.rollout_path = f"{self.log_dir}/{self.inout_folder}.json"
