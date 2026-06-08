@@ -1,4 +1,4 @@
-# MCPVerse: An Expansive, Real-World Benchmark for Agentic Tool Use 
+# MCPVerse: An Expansive, Real-World Benchmark for Agentic Tool Use   
 
 [![python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
